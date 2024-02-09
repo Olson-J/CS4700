@@ -1,0 +1,62 @@
+% args: dimension square
+
+% description: this operator will draw an image repeatedly, 
+%   with the image becoming smaller, translated, and rotated
+%   with each additional dimension.
+%
+% example calls:
+%   3 fractal
+%
+%   8 fractal
+
+/square {
+    newpath
+    0 0 moveto
+    b 0 rlineto
+    0 b rlineto
+    b neg 0 rlineto
+    closepath
+    fill
+    stroke
+} def
+
+/fractal {
+    /done exch def
+    /b 60 def
+
+    % 250 600 translate       % nice for drawing individual fractals,
+    % 2 2 scale               % but might mess up a testing script
+
+    % draw initial square and save graphics
+    square
+    gsave
+    
+    /done done 1 sub def    % move down a 'layer'
+    done 0 gt{
+        % halve square size and draw right side square
+        0.5 0.5 scale
+        b 2 mul 30 add b 8 sub neg translate
+        30 rotate
+        0 0.8 0.6 setrgbcolor
+        done fractal
+
+        % restore to previous square canvas
+        % halve square size and draw left side square
+        grestore
+        0.5 0.5 scale
+        30 neg rotate
+        b neg b neg translate
+        0.7 0 0.6 setrgbcolor
+        done fractal
+
+    }{
+        % have reached the end level of recursion, restore to prev. layer
+        grestore
+    }ifelse
+
+    % when done drawing fractal, clear the stack
+    done 0 eq{
+        clear  
+    }if
+    /done done 1 add def
+} def

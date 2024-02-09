@@ -1,0 +1,45 @@
+% args: duplication value
+% description: this operator will search the stack for the given 
+%   duplication value, and if found each occurence of the value 
+%   will be duplicated.
+%   If the value is not present in the stack, the stack becomes 
+%   empty. If not given a duplication value/the stack is empty, 
+%   the stack will remain empty.
+% examples:
+%   1 2 2 3 2 duplicate is called
+%   stack is now 1 2 2 2 2 3
+%   
+%   33 duplicate is called
+%   stack is still empty
+
+/duplicate {
+    /ct count 1 sub def
+    ct 1 gt{
+        /x exch def % get search value
+        /ct ct 1 sub def
+        % make a copy of the stack in an array
+        ct array
+        /stk exch def
+        stk astore
+        0 1 ct 1 sub{
+            % search through the array looking for the search value
+            /i exch def
+            stk i get x eq{
+                x
+                x
+            }{
+                stk i get
+            }ifelse
+        }for
+        count 1 neg roll
+        pop
+    }{
+        ct 1 eq{
+            % if stack only has one value, stack returns empty
+            /x exch def
+        }if
+    }ifelse
+    stack
+    clear
+    quit
+} def

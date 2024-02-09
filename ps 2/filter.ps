@@ -1,0 +1,30 @@
+% args: func filter
+% description: this operator will apply the given unary function
+%   on each element in the stack. Any elements on which the function
+%   evaluates to true will be removed from the stack, leaving the stack
+%   containing only the elements on which the function evaluated to false.
+% 
+% examples:
+%   1 2 2 3 {2 eq} filter is called
+%   stack is now 1 3
+%   
+%   {2 eq} filter is called
+%   stack becomes empty
+
+/filter {
+    count 1 ge{
+        /func exch def  
+        /ct count 1 sub def
+        1 1 ct {
+            /i exch def
+            /x exch def    % pull top element off stack
+            x func exec not{    % test
+                x         % if true, remove element
+                count 1 roll   
+            }if
+        }for
+        stack
+    }if
+    clear
+    quit
+} def

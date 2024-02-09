@@ -1,0 +1,48 @@
+% args: a b d r hypotrochoid
+%   a: radiusOfBigCircle
+%   b: radiusOfSmallCircle
+%   d: length of arm
+%   r: numberOfTimesAround
+%
+% description: this operand will use these formulas:
+%       x(t) = ((a - b) * cos(t)) + (d * cos( ((a-b) * t)/b ))
+%       y(t) = ((a - b) * sin(t)) - (d * sin( ((a-b) * t)/b ))
+%   to draw and display a line that will circle for 0.360*r degrees
+% 
+% example calls:
+%   100 25 40 1 hypotrochoid
+%   
+%   100 0 25 sub 40 1 hypotrochoid
+%   
+%   100 47 20 30 hypotrochoid
+
+/hypotrochoid {
+    7 dict begin
+        /r exch def
+        /d exch def
+        /b exch def
+        /a exch def
+        /t 360 r mul def
+        newpath
+        % 250 600 translate         % better for viewing, but could mess up testing script
+
+        % find x(t)
+        /startx a b sub 0 cos mul a b sub 0 mul b div cos d mul add def
+
+        % repeat with y(t)
+        /starty a b sub 0 sin mul a b sub 0 mul b div sin d mul sub def
+        startx starty moveto
+
+        1 1 t {
+            /i exch def
+            % find x(t), result will be put onto top of stack
+            % save result from top of stack into a var
+            /x a b sub i cos mul a b sub i mul b div cos d mul add def
+
+            % repeat with y(t)
+            /y a b sub i sin mul a b sub i mul b div sin d mul sub def
+            x y lineto
+        } for
+        stroke
+    end
+} def

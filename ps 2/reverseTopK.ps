@@ -1,0 +1,28 @@
+% args: n reverseTopK
+% description: this operator will reverse the top n items 
+%   on the stack. If the stack is empty it will remain empty.
+% 
+% examples:
+%   1 2 3 4 5 3 reverseTopK is called
+%   stack is now 1 2 5 4 3
+%   
+%   3 reverseTopK is called
+%   stack is empty
+
+/reverseTopK {
+    count 1 ge{
+        /n exch def
+        /ct count 1 sub def
+
+        n ct le{
+            0 1 n{
+                /i exch def
+                n i sub 1 roll
+
+            }for
+        }if
+        stack
+    }if
+    clear
+    quit
+} def
